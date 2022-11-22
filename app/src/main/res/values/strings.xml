@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">Pokedex</string>
+    <string name="dash">-</string>
+    <string name="try_again">Try Again</string>
+    <string name="load_from_db">Loaded from the local database</string>
+    <string name="load_from_api">Loaded from the remote API</string>
+    <string name="error_fetch_entries">Could not get the Pokemon names</string>
+    <string name="error_fetch_pokemon">Could not get the Pokemon\'s data</string>
+    <string name="more_info">More Information</string>
+    <string name="error_intent_show_pokemon">Could not open the information screen for %s</string>
+    <string name="back_sprite_desc">Back sprite of the pokemon</string>
+    <string name="front_sprite_desc">Front sprite of the pokemon</string>
+    <string name="two_dots">:</string>
+    <string name="type">Type</string>
+    <string name="experience">Exp</string>
+    <string name="base_maxhp">Base maxHp</string>
+    <string name="base_attack">Base att</string>
+    <string name="base_defense">Base def</string>
+    <string name="base_special_attack">Base sp att</string>
+    <string name="base_special_defense">Base sp def</string>
+    <string name="base_speed">Base speed</string>
+</resources>

@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="32dp"
+    tools:context=".ShowPokemonActivity">
+
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/loading_indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:indeterminate="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/try_again_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/try_again"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/pokedex_number_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toStartOf="@id/dash"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="#001" />
+
+    <TextView
+        android:id="@+id/dash"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="@string/dash"
+        app:layout_constraintEnd_toStartOf="@id/pokemon_name_txt"
+        app:layout_constraintStart_toEndOf="@id/pokedex_number_txt"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/pokemon_name_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/dash"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Bulbasaur" />
+
+    <ImageView
+        android:id="@+id/front_img"
+        android:layout_width="150dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:contentDescription="@string/front_sprite_desc"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toStartOf="@id/back_img"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/pokemon_name_txt"
+        tools:src="@drawable/default_front_sprite" />
+
+    <ImageView
+        android:id="@+id/back_img"
+        android:layout_width="150dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:contentDescription="@string/back_sprite_desc"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/front_img"
+        app:layout_constraintTop_toBottomOf="@id/pokemon_name_txt"
+        tools:src="@drawable/default_back_sprite" />
+
+    <GridLayout
+        android:id="@+id/pokemon_info_grid"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:columnCount="3"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/front_img">
+
+        <TextView
+            android:layout_rowWeight="1"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="16dp"
+            android:text="@string/type" />
+
+        <TextView
+            android:layout_rowWeight="1"
+            android:layout_gravity="center"
+            android:text="@string/two_dots" />
+
+        <TextView
+            android:id="@+id/pokemon_types_txt"
+            android:layout_rowWeight="1"
+            android:layout_gravity="center"
+            tools:text="grass\npoison" />
+
+        <TextView
+            android:layout_rowWeight="1"
+            android:layout_marginEnd="16dp"
+            android:text="@string/experience" />
+
+        <TextView
+            android:layout_rowWeight="1"
+            android:text="@string/two_dots" />
+
+        <TextView
+            android:id="@+id/pokemon_exp_txt"
+            android:layout_rowWeight="1"
+            android:layout_gravity="center"
+            tools:text="64" />
+
+        <TextView
+            android:layout_rowWeight="1"
+            android:layout_marginEnd="16dp"
+            android:text="@string/base_maxhp" />
+
+        <TextView
+            android:layout_rowWeight="1"
+            android:text="@string/two_dots" />
+
+        <TextView
+            android:id="@+id/pokemon_maxhp_txt"
+            android:layout_rowWeight="1"
+            android:layout_gravity="center"
+            tools:text="45" />
+
+        <TextView
+            android:layout_rowWeight="1"
+            android:layout_marginEnd="16dp"
+            android:text="@string/base_attack" />
+
+        <TextView
+            android:layout_rowWeight="1"
+            android:text="@string/two_dots" />
+
+        <TextView
+            android:id="@+id/pokemon_att_txt"
+            android:layout_rowWeight="1"
+            android:layout_gravity="center"
+            tools:text="49" />
+
+        <TextView
+            android:layout_rowWeight="1"
+            android:layout_marginEnd="16dp"
+            android:text="@string/base_defense" />
+
+        <TextView
+            android:layout_rowWeight="1"
+            android:text="@string/two_dots" />
+
+        <TextView
+            android:id="@+id/pokemon_def_txt"
+            android:layout_rowWeight="1"
+            android:layout_gravity="center"
+            tools:text="49" />
+
+        <TextView
+            android:layout_rowWeight="1"
+            android:layout_marginEnd="16dp"
+            android:text="@string/base_special_attack" />
+
+        <TextView
+            android:layout_rowWeight="1"
+            android:text="@string/two_dots" />
+
+        <TextView
+            android:id="@+id/pokemon_sp_att_txt"
+            android:layout_rowWeight="1"
+            android:layout_gravity="center"
+            tools:text="49" />
+
+        <TextView
+            android:layout_rowWeight="1"
+            android:layout_marginEnd="16dp"
+            android:text="@string/base_special_defense" />
+
+        <TextView
+            android:layout_rowWeight="1"
+            android:text="@string/two_dots" />
+
+        <TextView
+            android:id="@+id/pokemon_sp_def_txt"
+            android:layout_rowWeight="1"
+            android:layout_gravity="center"
+            tools:text="49" />
+
+        <TextView
+            android:layout_rowWeight="1"
+            android:layout_marginEnd="16dp"
+            android:text="@string/base_speed" />
+
+        <TextView
+            android:layout_rowWeight="1"
+            android:text="@string/two_dots" />
+
+        <TextView
+            android:id="@+id/pokemon_speed_txt"
+            android:layout_rowWeight="1"
+            android:layout_gravity="center"
+            tools:text="45" />
+    </GridLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
