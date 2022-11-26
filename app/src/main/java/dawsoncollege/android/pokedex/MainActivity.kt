@@ -7,12 +7,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import dawsoncollege.android.pokedex.MainActivity.MainActivityLoadState.*
 import dawsoncollege.android.pokedex.databinding.ActivityMainBinding
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     private lateinit var adapter: PokedexRecyclerViewAdapter
+    private lateinit var pokemon_list: List<Pokemon>
 
     /**
      * [IN_PROGRESS] The activity is currently loading data from disk or network
@@ -54,31 +56,38 @@ class MainActivity : AppCompatActivity() {
 
     // TODO : call this when data was loaded from the local cache
     private fun showLoadFromDbToast() = runBlocking {
-        Toast.makeText(
-            applicationContext,
-            getString(R.string.load_from_db),
-            Toast.LENGTH_LONG
-        ).show()
+        launch {
+            Toast.makeText(
+                applicationContext,
+                getString(R.string.load_from_db),
+                Toast.LENGTH_LONG
+            ).show()
+        }
     }
 
 
     // TODO : call this when data had to be loaded from the network API
     private fun showLoadFromAPIToast() = runBlocking {
-        Toast.makeText(
-            applicationContext,
-            getString(R.string.load_from_api),
-            Toast.LENGTH_LONG
-        ).show()
+        launch {
+            Toast.makeText(
+                applicationContext,
+                getString(R.string.load_from_api),
+                Toast.LENGTH_LONG
+            ).show()
+        }
     }
 
 
     // TODO : call this when data loading from cache and network failed
     private fun showErrorLoadToast() = runBlocking {
-        Toast.makeText(
-            applicationContext,
-            getString(R.string.error_fetch_entries),
-            Toast.LENGTH_LONG
-        ).show()
+        launch {
+            Toast.makeText(
+                applicationContext,
+                getString(R.string.error_fetch_entries),
+                Toast.LENGTH_LONG
+            ).show()
+        }
+        
     }
 
 
