@@ -1,6 +1,7 @@
 package dawsoncollege.android.pokedex
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -9,6 +10,7 @@ import dawsoncollege.android.pokedex.MainActivity.MainActivityLoadState.*
 import dawsoncollege.android.pokedex.databinding.ActivityMainBinding
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import java.io.BufferedReader
 import java.io.InputStream
 import java.net.URL
 import javax.net.ssl.HttpsURLConnection
@@ -95,7 +97,7 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun loadPokedexEntries() {
-        setLoadState(IN_PROGRESS)
+        setLoadState(FAILED)
 
         // TODO : try to get the list of pokedex entries from the local database
 
@@ -114,7 +116,13 @@ class MainActivity : AppCompatActivity() {
         //check for 200 OK
         if (conn.responseCode == HttpsURLConnection.HTTP_OK) {
             val inStream: InputStream = conn.inputStream
-            // TODO : code to read the InputStream here
+            val reader = BufferedReader(inStream.reader())
+            var content: String
+            try{
+                content = reader.readText()
+            } finally {
+                reader.close()
+            }
             inStream.close()
         }
         conn.disconnect()
