@@ -9,16 +9,12 @@ import dawsoncollege.android.pokedex.MainActivity.MainActivityLoadState.*
 import dawsoncollege.android.pokedex.databinding.ActivityMainBinding
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import java.io.BufferedReader
-import java.io.InputStream
-import java.net.URL
-import javax.net.ssl.HttpsURLConnection
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     private lateinit var adapter: PokedexRecyclerViewAdapter
-    private var pokeResponse: String = ""
+//    private lateinit var pokedexEntries: List<Pokemon>
 
     /**
      * [IN_PROGRESS] The activity is currently loading data from disk or network
@@ -105,26 +101,7 @@ class MainActivity : AppCompatActivity() {
         // TODO : display the list in the adapter
     }
 
-    private fun getAPIFromWeb(): Thread {
-        return Thread {
-            val url = URL("${POKEDEX_BASE_URL}/2/")
-            val conn = url.openConnection() as HttpsURLConnection
 
-            conn.requestMethod = "GET"
-            //open the socket
-            conn.connect()
-            //check for 200 OK
-            if (conn.responseCode == 200) {
-                val inStream: InputStream = conn.inputStream
-                val reader = BufferedReader(inStream.reader())
-                reader.use { reader ->
-                    pokeResponse = reader.readText()
-                    
-                }
-            }
-            conn.disconnect()
-        }
-    }
 
     private fun showPokedexEntries() {
         // TODO : pass the pokedex entries to the adapter
