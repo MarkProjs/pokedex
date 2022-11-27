@@ -1,7 +1,6 @@
 package dawsoncollege.android.pokedex
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -19,7 +18,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     private lateinit var adapter: PokedexRecyclerViewAdapter
-    private lateinit var pokemon_list: List<Pokemon>
+    private var pokeResponse: String = ""
 
     /**
      * [IN_PROGRESS] The activity is currently loading data from disk or network
@@ -97,35 +96,34 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun loadPokedexEntries() {
-        setLoadState(FAILED)
+        setLoadState(IN_PROGRESS)
 
         // TODO : try to get the list of pokedex entries from the local database
 
         // TODO : if necessary get the list from the web (and cache it in the local database)
-
+        getAPIFromWeb().start()
         // TODO : display the list in the adapter
     }
 
-    private fun getAPIFromWeb() {
-        val url = URL("https://pokeapi.co/api/v2/pokedex/2/")
-        val conn = url.openConnection() as HttpsURLConnection
+    private fun getAPIFromWeb(): Thread {
+        return Thread {
+            val url = URL("${POKEDEX_BASE_URL}/2/")
+            val conn = url.openConnection() as HttpsURLConnection
 
-        conn.requestMethod = "GET"
-        //open the socket
-
-        //check for 200 OK
-        if (conn.responseCode == HttpsURLConnection.HTTP_OK) {
-            val inStream: InputStream = conn.inputStream
-            val reader = BufferedReader(inStream.reader())
-            var content: String
-            try{
-                content = reader.readText()
-            } finally {
-                reader.close()
+            conn.requestMethod = "GET"
+            //open the socket
+            conn.connect()
+            //check for 200 OK
+            if (conn.responseCode == 200) {
+                val inStream: InputStream = conn.inputStream
+                val reader = BufferedReader(inStream.reader())
+                reader.use { reader ->
+                    pokeResponse = reader.readText()
+                    
+                }
             }
-            inStream.close()
+            conn.disconnect()
         }
-        conn.disconnect()
     }
 
     private fun showPokedexEntries() {
