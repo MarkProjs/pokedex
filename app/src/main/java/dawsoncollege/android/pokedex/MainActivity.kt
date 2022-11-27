@@ -9,6 +9,9 @@ import dawsoncollege.android.pokedex.MainActivity.MainActivityLoadState.*
 import dawsoncollege.android.pokedex.databinding.ActivityMainBinding
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import java.io.InputStream
+import java.net.URL
+import javax.net.ssl.HttpsURLConnection
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -87,7 +90,7 @@ class MainActivity : AppCompatActivity() {
                 Toast.LENGTH_LONG
             ).show()
         }
-        
+
     }
 
 
@@ -99,6 +102,22 @@ class MainActivity : AppCompatActivity() {
         // TODO : if necessary get the list from the web (and cache it in the local database)
 
         // TODO : display the list in the adapter
+    }
+
+    private fun getAPIFromWeb() {
+        val url = URL("https://pokeapi.co/api/v2/pokedex/2/")
+        val conn = url.openConnection() as HttpsURLConnection
+
+        conn.requestMethod = "GET"
+        //open the socket
+
+        //check for 200 OK
+        if (conn.responseCode == HttpsURLConnection.HTTP_OK) {
+            val inStream: InputStream = conn.inputStream
+            // TODO : code to read the InputStream here
+            inStream.close()
+        }
+        conn.disconnect()
     }
 
     private fun showPokedexEntries() {
