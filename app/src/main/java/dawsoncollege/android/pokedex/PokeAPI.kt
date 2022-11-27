@@ -5,7 +5,10 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
+import java.io.BufferedReader
+import java.io.InputStream
 import java.net.URL
+import javax.net.ssl.HttpsURLConnection
 
 private const val LOG_TAG = "POKEAPI"
 
@@ -14,6 +17,8 @@ const val POKEDEX_BASE_URL = "$POKE_API_BASE_URL/pokedex"
 const val POKEMON_BASE_URL = "$POKE_API_BASE_URL/pokemon"
 
 private val GSON: Gson = GsonBuilder().setPrettyPrinting().create()
+private var stringifiedPokedexEntries: String = ""
+//private var pokedexEntries: List<Pokemon> = TODO()
 
 /**
  * Simplifies the API response from the pokedex endpoint.
@@ -59,6 +64,35 @@ private fun simplifyPokedexEntries(apiResponse: String): String {
 
     return GSON.toJson(simplified)
 }
+
+public fun getAPIFromWeb(): Thread {
+    return Thread {
+        val url = URL("${POKEDEX_BASE_URL}/2/")
+        val conn = url.openConnection() as HttpsURLConnection
+
+        conn.requestMethod = "GET"
+        //open the socket
+        conn.connect()
+        //check for 200 OK
+        if (conn.responseCode == 200) {
+            val inStream: InputStream = conn.inputStream
+            val reader = BufferedReader(inStream.reader())
+            reader.use { reader ->
+                val tempResponse = reader.readText()
+                stringifiedPokedexEntries = simplifyPokedexEntries(tempResponse)
+                println(stringifiedPokedexEntries)
+            }
+        }
+        conn.disconnect()
+    }
+}
+
+//public fun getPokedexEntries(): List<Pokemon> {
+//    getAPIFromWeb().start()
+//
+//
+//    return pokedexEntries
+//}
 
 /**
  * Simplifies the API response from the pokemon endpoint.

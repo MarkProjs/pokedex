@@ -14,7 +14,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     private lateinit var adapter: PokedexRecyclerViewAdapter
-    private lateinit var pokemon_list: List<Pokemon>
+//    private lateinit var pokedexEntries: List<Pokemon>
 
     /**
      * [IN_PROGRESS] The activity is currently loading data from disk or network
@@ -87,7 +87,7 @@ class MainActivity : AppCompatActivity() {
                 Toast.LENGTH_LONG
             ).show()
         }
-        
+
     }
 
 
@@ -97,9 +97,11 @@ class MainActivity : AppCompatActivity() {
         // TODO : try to get the list of pokedex entries from the local database
 
         // TODO : if necessary get the list from the web (and cache it in the local database)
-
+        getAPIFromWeb().start()
         // TODO : display the list in the adapter
     }
+
+
 
     private fun showPokedexEntries() {
         // TODO : pass the pokedex entries to the adapter

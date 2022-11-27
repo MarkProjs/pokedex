@@ -7,6 +7,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.Gson
 import dawsoncollege.android.pokedex.ShowPokemonActivity.ShowPokemonLoadState.*
 import dawsoncollege.android.pokedex.databinding.ActivityShowPokemonBinding
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class ShowPokemonActivity : AppCompatActivity() {
     private lateinit var binding: ActivityShowPokemonBinding
@@ -75,28 +77,40 @@ class ShowPokemonActivity : AppCompatActivity() {
     }
 
     // TODO : call this when data was loaded from the local cache
-    private fun showLoadFromDbToast() =
-        Toast.makeText(
-            applicationContext,
-            getString(R.string.load_from_db),
-            Toast.LENGTH_LONG
-        ).show()
+    private fun showLoadFromDbToast() = runBlocking {
+        launch {
+            Toast.makeText(
+                applicationContext,
+                getString(R.string.load_from_db),
+                Toast.LENGTH_LONG
+            ).show()
+        }
+    }
+
 
     // TODO : call this when data had to be loaded from the network API
-    private fun showLoadFromAPIToast() =
-        Toast.makeText(
-            applicationContext,
-            getString(R.string.load_from_api),
-            Toast.LENGTH_LONG
-        ).show()
+    private fun showLoadFromAPIToast() = runBlocking {
+        launch {
+            Toast.makeText(
+                applicationContext,
+                getString(R.string.load_from_api),
+                Toast.LENGTH_LONG
+            ).show()
+        }
+    }
+
 
     // TODO : call this when data loading from cache and network failed
-    private fun showErrorLoadToast() =
-        Toast.makeText(
-            applicationContext,
-            getString(R.string.error_fetch_pokemon),
-            Toast.LENGTH_LONG
-        ).show()
+    private fun showErrorLoadToast() = runBlocking {
+        launch {
+            Toast.makeText(
+                applicationContext,
+                getString(R.string.error_fetch_pokemon),
+                Toast.LENGTH_LONG
+            ).show()
+        }
+    }
+
 
     private fun loadPokemon() {
         setLoadState(IN_PROGRESS)
