@@ -58,6 +58,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         loadPokedexEntries()
+        showPokedexEntries()
         binding.tryAgainBtn.setOnClickListener { loadPokedexEntries() }
     }
 
@@ -108,6 +109,7 @@ class MainActivity : AppCompatActivity() {
 //        setLoadState(COMPLETED)
         // TODO : if necessary get the list from the web (and cache it in the local database)
         pokedexEntries = getPokedexEntries()
+        setLoadState(COMPLETED)
         // TODO : display the list in the adapter
     }
 
@@ -115,7 +117,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun showPokedexEntries() {
         // TODO : pass the pokedex entries to the adapter
-        adapter = PokedexRecyclerViewAdapter()
+        adapter = PokedexRecyclerViewAdapter(pokedexEntries)
         binding.pokedexRecyclerView.adapter = adapter
         binding.pokedexRecyclerView.layoutManager = LinearLayoutManager(this)
     }

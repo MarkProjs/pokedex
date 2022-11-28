@@ -18,7 +18,7 @@ const val POKEMON_BASE_URL = "$POKE_API_BASE_URL/pokemon"
 
 private val GSON: Gson = GsonBuilder().setPrettyPrinting().create()
 private var simplifiedPokedexEntries: String = ""
-private var pokedexEntries: ArrayList<Pokemon> = TODO()
+private lateinit var pokedexEntries: ArrayList<Pokemon>
 
 /**
  * Simplifies the API response from the pokedex endpoint.
@@ -95,6 +95,8 @@ public fun getPokedexEntries(): ArrayList<Pokemon>{
     for (i in simplifiedPokeEntries.asJsonArray) {
         pokedexEntries.add(Pokemon(i.asJsonObject["number"].asInt, i.asJsonObject["name"].asString))
     }
+    println(pokedexEntries)
+
     return pokedexEntries
 }
 
