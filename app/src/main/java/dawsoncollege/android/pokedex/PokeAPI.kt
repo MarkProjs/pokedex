@@ -95,9 +95,7 @@ public fun getPokedexEntries(): ArrayList<Pokemon>{
     for (i in simplifiedPokeEntries.asJsonArray) {
         pokedexEntries.add(Pokemon(i.asJsonObject["number"].asInt, i.asJsonObject["name"].asString))
     }
-
     return pokedexEntries
-
 }
 
 
