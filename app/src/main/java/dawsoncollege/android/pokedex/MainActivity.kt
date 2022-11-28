@@ -12,12 +12,13 @@ import dawsoncollege.android.pokedex.MainActivity.MainActivityLoadState.*
 import dawsoncollege.android.pokedex.databinding.ActivityMainBinding
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     private lateinit var adapter: PokedexRecyclerViewAdapter
-    private lateinit var pokedexEntries: ArrayList<Pokemon>
+    private var pokedexEntries = arrayListOf<Pokemon>()
 //    private val db = Room.databaseBuilder(
 //                        applicationContext,
 //                        PokemonRoomDatabase::class.java, "pokemon_db").build()
@@ -108,11 +109,18 @@ class MainActivity : AppCompatActivity() {
 //        }
 //        setLoadState(COMPLETED)
         // TODO : if necessary get the list from the web (and cache it in the local database)
-        pokedexEntries = getPokedexEntries()
-        setLoadState(COMPLETED)
+        lifecycleScope.launch(Dispatchers.Main) {
+            pokedexEntries = fetchData()
+            setLoadState(COMPLETED)
+        }
         // TODO : display the list in the adapter
     }
 
+    private suspend fun fetchData(): ArrayList<Pokemon> {
+        return withContext(Dispatchers.IO) {
+            return@withContext getPokedexEntries()
+        }
+    }
 
 
     private fun showPokedexEntries() {
