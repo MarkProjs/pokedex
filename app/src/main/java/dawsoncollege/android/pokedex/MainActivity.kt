@@ -5,6 +5,8 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.room.Room
+import androidx.room.RoomDatabase
 import dawsoncollege.android.pokedex.MainActivity.MainActivityLoadState.*
 import dawsoncollege.android.pokedex.databinding.ActivityMainBinding
 import kotlinx.coroutines.launch
@@ -15,6 +17,10 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var adapter: PokedexRecyclerViewAdapter
 //    private lateinit var pokedexEntries: List<Pokemon>
+    private val db = Room.databaseBuilder(
+                        applicationContext,
+                        PokemonRoomDatabase::class.java, "pokemon_db").build()
+    private val pokemonDao = db.pokemonDao()
 
     /**
      * [IN_PROGRESS] The activity is currently loading data from disk or network
@@ -97,7 +103,6 @@ class MainActivity : AppCompatActivity() {
         // TODO : try to get the list of pokedex entries from the local database
 
         // TODO : if necessary get the list from the web (and cache it in the local database)
-        getAPIFromWeb().start()
         // TODO : display the list in the adapter
     }
 

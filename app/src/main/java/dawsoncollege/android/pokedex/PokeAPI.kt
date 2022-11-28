@@ -18,7 +18,7 @@ const val POKEMON_BASE_URL = "$POKE_API_BASE_URL/pokemon"
 
 private val GSON: Gson = GsonBuilder().setPrettyPrinting().create()
 private var stringifiedPokedexEntries: String = ""
-//private var pokedexEntries: List<Pokemon> = TODO()
+private var pokedexEntries: List<Pokemon> = TODO()
 
 /**
  * Simplifies the API response from the pokedex endpoint.
@@ -87,12 +87,12 @@ public fun getAPIFromWeb(): Thread {
     }
 }
 
-//public fun getPokedexEntries(): List<Pokemon> {
-//    getAPIFromWeb().start()
-//
-//
-//    return pokedexEntries
-//}
+public fun getPokedexEntries(): List<Pokemon> {
+    getAPIFromWeb().start()
+
+
+    return pokedexEntries
+}
 
 /**
  * Simplifies the API response from the pokemon endpoint.

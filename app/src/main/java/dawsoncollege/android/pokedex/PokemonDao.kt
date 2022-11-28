@@ -17,6 +17,6 @@ interface PokemonDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertPokemon(pokemon: Pokemon)
 
-//    @Query("DELETE FROM pokemon_table where name = :name")
-//    suspend fun deleteAPokemon(name: String)
+    @Query("DELETE FROM pokemon_table where name = :name")
+    suspend fun deleteAPokemon(name: String)
 }
