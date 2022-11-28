@@ -1,6 +1,5 @@
 package dawsoncollege.android.pokedex
 
-import android.graphics.Bitmap
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonArray
@@ -10,6 +9,7 @@ import java.io.InputStream
 import java.net.URL
 import javax.net.ssl.HttpsURLConnection
 
+
 private const val LOG_TAG = "POKEAPI"
 
 const val POKE_API_BASE_URL = "https://pokeapi.co/api/v2"
@@ -17,8 +17,8 @@ const val POKEDEX_BASE_URL = "$POKE_API_BASE_URL/pokedex"
 const val POKEMON_BASE_URL = "$POKE_API_BASE_URL/pokemon"
 
 private val GSON: Gson = GsonBuilder().setPrettyPrinting().create()
-private var stringifiedPokedexEntries: String = ""
-private var pokedexEntries: List<Pokemon> = TODO()
+private var simplifiedPokedexEntries: String = ""
+private var pokedexEntries: ArrayList<Pokemon> = TODO()
 
 /**
  * Simplifies the API response from the pokedex endpoint.
@@ -65,7 +65,7 @@ private fun simplifyPokedexEntries(apiResponse: String): String {
     return GSON.toJson(simplified)
 }
 
-public fun getAPIFromWeb(): Thread {
+private fun getAPIFromWeb(): Thread {
     return Thread {
         val url = URL("${POKEDEX_BASE_URL}/2/")
         val conn = url.openConnection() as HttpsURLConnection
@@ -79,20 +79,28 @@ public fun getAPIFromWeb(): Thread {
             val reader = BufferedReader(inStream.reader())
             reader.use { reader ->
                 val tempResponse = reader.readText()
-                stringifiedPokedexEntries = simplifyPokedexEntries(tempResponse)
-                println(stringifiedPokedexEntries)
+                simplifiedPokedexEntries = (simplifyPokedexEntries(tempResponse))
+
             }
         }
         conn.disconnect()
     }
 }
 
-public fun getPokedexEntries(): List<Pokemon> {
+public fun getPokedexEntries(): ArrayList<Pokemon>{
+    // run the thread
     getAPIFromWeb().start()
-
+    //do the parsing
+    val simplifiedPokeEntries = GSON.fromJson(simplifiedPokedexEntries, JsonObject::class.java)
+    for (i in simplifiedPokeEntries.asJsonArray) {
+        pokedexEntries.add(Pokemon(i.asJsonObject["number"].asInt, i.asJsonObject["name"].asString))
+    }
 
     return pokedexEntries
+
 }
+
+
 
 /**
  * Simplifies the API response from the pokemon endpoint.
