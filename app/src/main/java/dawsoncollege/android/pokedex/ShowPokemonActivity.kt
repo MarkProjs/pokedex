@@ -1,5 +1,6 @@
 package dawsoncollege.android.pokedex
 
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -24,6 +25,8 @@ class ShowPokemonActivity : AppCompatActivity() {
     private lateinit var pokeInfo: JsonObject
     private lateinit var db: PokemonRoomDatabase
     private lateinit var pokeInfoDao: PokeInfoDao
+    private lateinit var frontImage: Bitmap
+    private lateinit var backImage: Bitmap
 
     /**
      * [IN_PROGRESS] The activity is currently loading data from disk or network
@@ -130,10 +133,16 @@ class ShowPokemonActivity : AppCompatActivity() {
         // TODO : try to get the pokemon data (for the pokedex entry received in the intent) from the local database
 
         // TODO : if necessary get the pokemon data from the web (and cache it in the local database)
-        lifecycleScope.launch(Dispatchers.Main) {
+        lifecycleScope.launch(Dispatchers.IO) {
             pokeInfo = fetchPokeInfo()
-            displayPokemon()
-            setLoadState(COMPLETED)
+            frontImage = getImageSprite(pokeInfo.asJsonObject["front_sprite"].asString)
+            backImage = getImageSprite(pokeInfo.asJsonObject["back_sprite"].asString)
+
+            withContext(Dispatchers.Main) {
+                displayPokemon()
+                setLoadState(COMPLETED)
+            }
+
         }
         // TODO : if the pokemon is loaded, get the sprites from the web
 
@@ -151,14 +160,16 @@ class ShowPokemonActivity : AppCompatActivity() {
     }
 
 
+
+
     private fun displayPokemon() {
         // TODO : from the pokemon data that was loaded by [loadPokemon], display it
         binding.pokedexNumberTxt.text = pokeNameAndNumber.asJsonObject["name"].asString/* pokedex entry number e.g "#023" */
         binding.pokemonNameTxt.text =
             pokeNameAndNumber.asJsonObject["number"].asInt.toString()/* pokedex entry name e.g. "pikachu" */
-//
-//        binding.frontImg.setImageBitmap(/* pokemon's front sprite */)
-//        binding.backImg.setImageBitmap(/* pokemon's back sprite */)
+
+        binding.frontImg.setImageBitmap(frontImage)
+        binding.backImg.setImageBitmap(backImage)
 //
 //        binding.pokemonTypesTxt.text = /* pokemon types e.g. "poison, grass" */
         binding.pokemonExpTxt.text = pokeInfo.asJsonObject["base_exp_reward"].asInt.toString()
