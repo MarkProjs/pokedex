@@ -14,9 +14,6 @@ interface PokeInfoDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertPokeInfo(pokeInfo: PokeInfo)
 
-    @Query ("SELECT (SELECT COUNT(*) FROM pokemon_info_table)== 0")
-    fun isTableEmpty(): Boolean
-
     @Query ("SELECT COUNT(*) FROM pokemon_info_table WHERE name = :name")
     fun countPokemon(name: String): Int
 }

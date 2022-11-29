@@ -86,7 +86,6 @@ class ShowPokemonActivity : AppCompatActivity() {
 
         intent.extras?.let {
             pokeNameAndNumber = GSON.fromJson(it.getString(POKEDEX_ENTRY_KEY), JsonObject::class.java)
-            println(pokeNameAndNumber)
         }
 
         loadPokemon()
@@ -146,9 +145,7 @@ class ShowPokemonActivity : AppCompatActivity() {
             }
 
         }
-        // TODO : if the pokemon is loaded, get the sprites from the web
 
-        // TODO : display the pokemon data
     }
 
     private suspend fun fetchPokeInfo(): JsonObject {
@@ -160,9 +157,6 @@ class ShowPokemonActivity : AppCompatActivity() {
             return@withContext tempInfo
         }
     }
-
-
-
 
     private fun displayPokemon() {
         binding.pokedexNumberTxt.text = pokeNameAndNumber.asJsonObject["name"].asString/* pokedex entry number e.g "#023" */
@@ -184,16 +178,9 @@ class ShowPokemonActivity : AppCompatActivity() {
 
     private fun turnArrToString(arr: JsonArray): String {
         var types: String = arr[0].asString
-        if (arr.size() > 0) {
-            for(i in 1..arr.size()) {
-                types += if (i == arr.size() - 1) {
-                    arr[arr.size() -1].asString
-                } else {
-                    ", ${arr[i].asString}"
-                }
-            }
+        if (arr.size() >= 2) {
+            types += ", ${arr[1].asString}"
         }
-
         return types
     }
 }
