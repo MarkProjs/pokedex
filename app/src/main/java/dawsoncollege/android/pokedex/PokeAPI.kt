@@ -1,5 +1,7 @@
 package dawsoncollege.android.pokedex
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonArray
@@ -19,6 +21,7 @@ const val POKEMON_BASE_URL = "$POKE_API_BASE_URL/pokemon"
 private val GSON: Gson = GsonBuilder().setPrettyPrinting().create()
 private var simplifiedPokedexEntries: String = ""
 private var pokedexEntries = arrayListOf<Pokemon>()
+private lateinit var spriteBitMap: Bitmap
 
 /**
  * Simplifies the API response from the pokedex endpoint.
@@ -84,7 +87,7 @@ private fun getAPIFromWeb() {
     conn.disconnect()
 }
 
-public fun getPokedexEntries(): List<Pokemon> {
+fun getPokedexEntries(): List<Pokemon> {
     getAPIFromWeb()
     //do the parsing
     val simplifiedPokeEntries = GSON.fromJson(simplifiedPokedexEntries, JsonArray::class.java)
@@ -93,6 +96,7 @@ public fun getPokedexEntries(): List<Pokemon> {
     }
     return pokedexEntries
 }
+
 
 
 
@@ -161,6 +165,49 @@ private fun simplifyPokemon(apiResponse: String): String {
                 .asJsonObject["red-blue"].asJsonObject["front_transparent"].asString
         )
     }
-
     return GSON.toJson(simplified)
 }
+
+
+//get the pokemon API
+private fun getPokemonAPI(pokemonName: String): String {
+    val url = URL("${POKEMON_BASE_URL}/${pokemonName}")
+    val conn = url.openConnection() as HttpsURLConnection
+    var simplifiedPokemon = ""
+    conn.requestMethod = "GET"
+    //open the socket
+    conn.connect()
+    //check the reposneCode
+    if(conn.responseCode == 200) {
+        val inStream: InputStream = conn.inputStream
+        val reader = BufferedReader(inStream.reader())
+        reader.use {read ->
+            val tempResponse = read.readText()
+            simplifiedPokemon = simplifyPokemon(tempResponse)
+        }
+    }
+    conn.disconnect()
+    return  simplifiedPokemon
+}
+
+fun parsePokeInfo(pokemonName: String): JsonObject {
+    val stringifiedJson = getPokemonAPI(pokemonName)
+    return GSON.fromJson(stringifiedJson, JsonObject::class.java)
+}
+
+fun getImageSprite(imageURL: String): Bitmap {
+    val url = URL(imageURL)
+    val conn = url.openConnection() as HttpsURLConnection
+    conn.connect()
+    conn.requestMethod = "GET"
+    if (conn.responseCode == 200) {
+        val inStream: InputStream = conn.inputStream
+        spriteBitMap = BitmapFactory.decodeStream(inStream)
+    }
+    return spriteBitMap
+}
+
+
+
+
+

@@ -3,9 +3,24 @@ package dawsoncollege.android.pokedex
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.google.gson.JsonElement
 
 @Entity(tableName = "pokemon_table")
 data class Pokemon(
     @PrimaryKey val number: Int,
     @ColumnInfo val name: String)
+
+
+@Entity(tableName = "pokemon_info_table")
+class PokeInfo(
+    @PrimaryKey val name: String,
+    @ColumnInfo val base_exp_reward: Int,
+    @ColumnInfo val types: String,
+    @ColumnInfo val base_maxHp: Int,
+    @ColumnInfo val base_attack: Int,
+    @ColumnInfo val base_defense: Int,
+    @ColumnInfo val base_special_attack: Int,
+    @ColumnInfo val base_special_defense: Int,
+    @ColumnInfo val base_speed: Int,
+    @ColumnInfo val back_sprite: String,
+    @ColumnInfo val front_sprite: String
+)
