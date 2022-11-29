@@ -1,5 +1,6 @@
 package dawsoncollege.android.pokedex
 
+import android.database.Cursor
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -7,22 +8,18 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.room.Room
 import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.Dispatchers
+import androidx.room.RoomDatabase
 import dawsoncollege.android.pokedex.MainActivity.MainActivityLoadState.*
 import dawsoncollege.android.pokedex.databinding.ActivityMainBinding
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     private lateinit var adapter: PokedexRecyclerViewAdapter
-    private var pokedexEntries = arrayListOf<Pokemon>()
-//    private val db = Room.databaseBuilder(
-//                        applicationContext,
-//                        PokemonRoomDatabase::class.java, "pokemon_db").build()
-//    private val pokemonDao = db.pokemonDao()
+    private var pokedexEntries = listOf<Pokemon>()
+    private lateinit var db: PokemonRoomDatabase
+    private lateinit var pokemonDao: PokemonDao
 
     /**
      * [IN_PROGRESS] The activity is currently loading data from disk or network
@@ -57,14 +54,18 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        //build the db
+        db = Room.databaseBuilder(
+            this@MainActivity,
+            PokemonRoomDatabase::class.java, "pokemon_db").build()
+            //dao
+        pokemonDao = db.pokemonDao()
         loadPokedexEntries()
-        showPokedexEntries()
         binding.tryAgainBtn.setOnClickListener { loadPokedexEntries() }
     }
 
     // TODO : call this when data was loaded from the local cache
-    private fun showLoadFromDbToast() = runBlocking {
+    private suspend fun showLoadFromDbToast() = coroutineScope {
         launch {
             Toast.makeText(
                 applicationContext,
@@ -76,7 +77,7 @@ class MainActivity : AppCompatActivity() {
 
 
     // TODO : call this when data had to be loaded from the network API
-    private fun showLoadFromAPIToast() = runBlocking {
+    private suspend fun showLoadFromAPIToast() = coroutineScope {
         launch {
             Toast.makeText(
                 applicationContext,
@@ -88,7 +89,7 @@ class MainActivity : AppCompatActivity() {
 
 
     // TODO : call this when data loading from cache and network failed
-    private fun showErrorLoadToast() = runBlocking {
+    private suspend fun showErrorLoadToast() = coroutineScope {
         launch {
             Toast.makeText(
                 applicationContext,
@@ -104,27 +105,44 @@ class MainActivity : AppCompatActivity() {
         setLoadState(IN_PROGRESS)
 
         // TODO : try to get the list of pokedex entries from the local database
-//        lifecycleScope.launch(Dispatchers.IO) {
-//            pokedexEntries = pokemonDao.getAllPokemons()
-//        }
-//        setLoadState(COMPLETED)
-        // TODO : if necessary get the list from the web (and cache it in the local database)
         lifecycleScope.launch(Dispatchers.Main) {
             pokedexEntries = fetchData()
+            showPokedexEntries()
             setLoadState(COMPLETED)
         }
-        // TODO : display the list in the adapter
+
+        // TODO : if necessary get the list from the web (and cache it in the local database)
+
     }
 
-    private suspend fun fetchData(): ArrayList<Pokemon> {
+
+    private suspend fun fetchData(): List<Pokemon> {
         return withContext(Dispatchers.IO) {
-            return@withContext getPokedexEntries()
+            var tempList: List<Pokemon> = listOf<Pokemon>()
+            if(pokemonDao.isEmpty()) {
+                tempList = getPokedexEntries()
+                withContext(Dispatchers.Main) {
+                    showLoadFromAPIToast()
+                }
+                for(i in tempList) {
+                    pokemonDao.insertPokemon(i)
+                }
+            }
+            else {
+                tempList = pokemonDao.getAllPokemons()
+                withContext(Dispatchers.Main) {
+                    showLoadFromDbToast()
+                }
+
+            }
+
+            return@withContext tempList
+
         }
     }
 
 
     private fun showPokedexEntries() {
-        // TODO : pass the pokedex entries to the adapter
         adapter = PokedexRecyclerViewAdapter(pokedexEntries)
         binding.pokedexRecyclerView.adapter = adapter
         binding.pokedexRecyclerView.layoutManager = LinearLayoutManager(this)

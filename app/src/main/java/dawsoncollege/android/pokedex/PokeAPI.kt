@@ -84,7 +84,7 @@ private fun getAPIFromWeb() {
     conn.disconnect()
 }
 
-public fun getPokedexEntries(): ArrayList<Pokemon>{
+public fun getPokedexEntries(): List<Pokemon> {
     getAPIFromWeb()
     //do the parsing
     val simplifiedPokeEntries = GSON.fromJson(simplifiedPokedexEntries, JsonArray::class.java)

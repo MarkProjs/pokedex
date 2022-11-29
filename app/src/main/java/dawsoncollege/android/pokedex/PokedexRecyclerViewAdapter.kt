@@ -13,7 +13,7 @@ import com.google.gson.GsonBuilder
 import dawsoncollege.android.pokedex.databinding.PokedexItemBinding
 
 // TODO : take a list of pokedex entries as parameter to [PokedexRecyclerViewAdapter]'s constructor
-class PokedexRecyclerViewAdapter(private val pokemonList: ArrayList<Pokemon>) :
+class PokedexRecyclerViewAdapter(private val pokemonList: List<Pokemon>) :
     RecyclerView.Adapter<PokedexRecyclerViewAdapter.PokedexViewHolder>() {
     private val LOG_TAG = "POKEDEX_ADAPTER"
     private val GSON: Gson = GsonBuilder().setPrettyPrinting().create()
