@@ -12,7 +12,6 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import dawsoncollege.android.pokedex.databinding.PokedexItemBinding
 
-// TODO : take a list of pokedex entries as parameter to [PokedexRecyclerViewAdapter]'s constructor
 class PokedexRecyclerViewAdapter(private val pokemonList: List<Pokemon>) :
     RecyclerView.Adapter<PokedexRecyclerViewAdapter.PokedexViewHolder>() {
     private val LOG_TAG = "POKEDEX_ADAPTER"
@@ -28,10 +27,8 @@ class PokedexRecyclerViewAdapter(private val pokemonList: List<Pokemon>) :
     override fun onBindViewHolder(holder: PokedexViewHolder, position: Int) {
         val binding = holder.binding
         val context = binding.root.context
-        // TODO : get the pokedex entry from the list that this adapter should have
         val pokedexEntry = pokemonList[position]
 
-        // TODO : change to show the information of the pokedex entry
         binding.pokedexNumberTxt.text = pokedexEntry.number.toString()
         binding.pokemonNameTxt.text = pokedexEntry.name
 
@@ -46,7 +43,6 @@ class PokedexRecyclerViewAdapter(private val pokemonList: List<Pokemon>) :
                 Log.w(LOG_TAG, "Could not launch intent ShowPokemon", exc)
                 Toast.makeText(
                     context,
-                    // TODO : change "pokemon name" to the name of the pokemon
                     context.getString(R.string.error_intent_show_pokemon, pokedexEntry.name),
                     Toast.LENGTH_LONG
                 ).show()
@@ -54,5 +50,5 @@ class PokedexRecyclerViewAdapter(private val pokemonList: List<Pokemon>) :
         }
     }
 
-    override fun getItemCount(): Int = pokemonList.size // TODO : change that to get the real item count
+    override fun getItemCount(): Int = pokemonList.size
 }

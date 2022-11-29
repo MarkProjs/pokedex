@@ -62,7 +62,6 @@ class MainActivity : AppCompatActivity() {
         binding.tryAgainBtn.setOnClickListener { loadPokedexEntries() }
     }
 
-    // TODO : call this when data was loaded from the local cache
     private suspend fun showLoadFromDbToast() = coroutineScope {
         launch {
             Toast.makeText(
@@ -74,7 +73,6 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    // TODO : call this when data had to be loaded from the network API
     private suspend fun showLoadFromAPIToast() = coroutineScope {
         launch {
             Toast.makeText(
@@ -86,7 +84,6 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    // TODO : call this when data loading from cache and network failed
     private suspend fun showErrorLoadToast() = coroutineScope {
         launch {
             Toast.makeText(
@@ -102,14 +99,12 @@ class MainActivity : AppCompatActivity() {
     private fun loadPokedexEntries() {
         setLoadState(IN_PROGRESS)
 
-        // TODO : try to get the list of pokedex entries from the local database
         lifecycleScope.launch(Dispatchers.Main) {
             pokedexEntries = fetchData()
             showPokedexEntries()
             setLoadState(COMPLETED)
         }
-
-        // TODO : if necessary get the list from the web (and cache it in the local database)
+        
 
     }
 
