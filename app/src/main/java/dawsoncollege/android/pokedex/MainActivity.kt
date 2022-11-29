@@ -128,12 +128,17 @@ class MainActivity : AppCompatActivity() {
                     pokemonDao.insertPokemon(i)
                 }
             }
-            else {
+            else if(!pokemonDao.isEmpty()){
                 tempList = pokemonDao.getAllPokemons()
                 withContext(Dispatchers.Main) {
                     showLoadFromDbToast()
                 }
 
+            }
+            else {
+                withContext(Dispatchers.Main) {
+                    showErrorLoadToast()
+                }
             }
 
             return@withContext tempList
