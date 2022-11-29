@@ -8,6 +8,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.room.Room
 import com.google.gson.Gson
 import com.google.gson.JsonObject
+import com.google.gson.internal.LinkedTreeMap
 import dawsoncollege.android.pokedex.ShowPokemonActivity.ShowPokemonLoadState.*
 import dawsoncollege.android.pokedex.databinding.ActivityShowPokemonBinding
 import kotlinx.coroutines.*
@@ -80,7 +81,8 @@ class ShowPokemonActivity : AppCompatActivity() {
         pokeInfoDao = db.pokeInfoDao()
 
         intent.extras?.let {
-            pokeNameAndNumber = GSON.fromJson(it.getString(POKEDEX_ENTRY_KEY), Any::class.java) as JsonObject
+            pokeNameAndNumber = GSON.fromJson(it.getString(POKEDEX_ENTRY_KEY), JsonObject::class.java)
+            println(pokeNameAndNumber)
         }
 
         loadPokemon()
