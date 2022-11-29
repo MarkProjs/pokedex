@@ -161,12 +161,12 @@ class ShowPokemonActivity : AppCompatActivity() {
 //        binding.backImg.setImageBitmap(/* pokemon's back sprite */)
 //
 //        binding.pokemonTypesTxt.text = /* pokemon types e.g. "poison, grass" */
-//        binding.pokemonExpTxt.text =
-//        binding.pokemonMaxhpTxt.text =
-//        binding.pokemonAttTxt.text =
-//        binding.pokemonDefTxt.text =
-//        binding.pokemonSpAttTxt.text =
-//        binding.pokemonSpDefTxt.text =
-//        binding.pokemonSpeedTxt.text =
+        binding.pokemonExpTxt.text = pokeInfo.asJsonObject["base_exp_reward"].asInt.toString()
+        binding.pokemonMaxhpTxt.text = pokeInfo.asJsonObject["base_maxHp"].asInt.toString()
+        binding.pokemonAttTxt.text = pokeInfo.asJsonObject["base_attack"].asInt.toString()
+        binding.pokemonDefTxt.text = pokeInfo.asJsonObject["base_defense"].asInt.toString()
+        binding.pokemonSpAttTxt.text = pokeInfo.asJsonObject["base_special-attack"].asInt.toString()
+        binding.pokemonSpDefTxt.text = pokeInfo.asJsonObject["base_special-defense"].asInt.toString()
+        binding.pokemonSpeedTxt.text = pokeInfo.asJsonObject["base_speed"].asInt.toString()
     }
 }

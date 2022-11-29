@@ -111,8 +111,8 @@ private fun getPokemonAPI(pokemonName: String): String {
             simplifiedPokemon = simplifyPokemon(tempResponse)
         }
     }
-    return  simplifiedPokemon
     conn.disconnect()
+    return  simplifiedPokemon
 }
 
 fun parsePokeInfo(pokemonName: String): JsonObject {
