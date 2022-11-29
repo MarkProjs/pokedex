@@ -117,7 +117,8 @@ private fun getPokemonAPI(pokemonName: String) {
 //turn into json object
 fun getPokemonDetails(pokemonName: String): JsonObject {
     getPokemonAPI(pokemonName)
-    
+    //parse the data from the api pokemon and return it
+    return GSON.fromJson(simplifiedPokemon, JsonObject::class.java)
 }
 
 /**
