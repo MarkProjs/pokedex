@@ -11,14 +11,8 @@ interface PokemonDao {
     @Query("SELECT * FROM pokemon_table")
     fun getAllPokemons(): List<Pokemon>
 
-    @Query("SELECT * FROM pokemon_table WHERE name = :name ")
-    fun getAPokemon(name: String): List<Pokemon>
-
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertPokemon(pokemon: Pokemon)
-
-    @Query("DELETE FROM pokemon_table where name = :name")
-    suspend fun deleteAPokemon(name: String)
 
     @Query("SELECT (SELECT COUNT(*) FROM pokemon_table) == 0")
     fun isEmpty(): Boolean
