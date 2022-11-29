@@ -1,6 +1,5 @@
 package dawsoncollege.android.pokedex
 
-import android.database.Cursor
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -8,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.room.Room
 import androidx.lifecycle.lifecycleScope
-import androidx.room.RoomDatabase
 import dawsoncollege.android.pokedex.MainActivity.MainActivityLoadState.*
 import dawsoncollege.android.pokedex.databinding.ActivityMainBinding
 import kotlinx.coroutines.*
