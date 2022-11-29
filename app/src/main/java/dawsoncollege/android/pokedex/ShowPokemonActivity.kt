@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.room.Room
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import dawsoncollege.android.pokedex.ShowPokemonActivity.ShowPokemonLoadState.*
@@ -21,6 +22,8 @@ class ShowPokemonActivity : AppCompatActivity() {
 
     private val GSON: Gson = Gson()
     private lateinit var pokeNameAndNumber: JsonObject
+    private lateinit var db: PokemonRoomDatabase
+    private lateinit var pokeInfoDao: PokeInfoDao
 
     /**
      * [IN_PROGRESS] The activity is currently loading data from disk or network
@@ -70,8 +73,13 @@ class ShowPokemonActivity : AppCompatActivity() {
         binding = ActivityShowPokemonBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        //build the db
+        db = Room.databaseBuilder(
+            this@ShowPokemonActivity,
+            PokemonRoomDatabase::class.java, "pokemon_db").build()
+        pokeInfoDao = db.pokeInfoDao()
+
         intent.extras?.let {
-            // TODO : get the result from the intent, into a variable
             pokeNameAndNumber = GSON.fromJson(it.getString(POKEDEX_ENTRY_KEY), Any::class.java) as JsonObject
         }
 

@@ -8,7 +8,6 @@ import androidx.room.Query
 @Dao
 interface PokeInfoDao {
 
-
     @Query("SELECT * FROM pokemon_info_table WHERE name = :name")
     fun getPokeInfo(name: String): PokeInfo
 
