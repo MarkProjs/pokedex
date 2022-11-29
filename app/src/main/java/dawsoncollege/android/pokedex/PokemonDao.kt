@@ -19,4 +19,7 @@ interface PokemonDao {
 
     @Query("DELETE FROM pokemon_table where name = :name")
     suspend fun deleteAPokemon(name: String)
+
+    @Query("SELECT (SELECT COUNT(*) FROM pokemon_table) == 0")
+    fun isEmpty(): Boolean
 }

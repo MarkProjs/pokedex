@@ -18,7 +18,7 @@ const val POKEMON_BASE_URL = "$POKE_API_BASE_URL/pokemon"
 
 private val GSON: Gson = GsonBuilder().setPrettyPrinting().create()
 private var simplifiedPokedexEntries: String = ""
-private var pokedexEntries: ArrayList<Pokemon> = TODO()
+private var pokedexEntries = arrayListOf<Pokemon>()
 
 /**
  * Simplifies the API response from the pokedex endpoint.
@@ -65,33 +65,29 @@ private fun simplifyPokedexEntries(apiResponse: String): String {
     return GSON.toJson(simplified)
 }
 
-private fun getAPIFromWeb(): Thread {
-    return Thread {
-        val url = URL("${POKEDEX_BASE_URL}/2/")
-        val conn = url.openConnection() as HttpsURLConnection
+private fun getAPIFromWeb() {
+    val url = URL("${POKEDEX_BASE_URL}/2/")
+    val conn = url.openConnection() as HttpsURLConnection
 
-        conn.requestMethod = "GET"
-        //open the socket
-        conn.connect()
-        //check for 200 OK
-        if (conn.responseCode == 200) {
-            val inStream: InputStream = conn.inputStream
-            val reader = BufferedReader(inStream.reader())
-            reader.use { reader ->
-                val tempResponse = reader.readText()
-                simplifiedPokedexEntries = (simplifyPokedexEntries(tempResponse))
-
-            }
+    conn.requestMethod = "GET"
+    //open the socket
+    conn.connect()
+    //check for 200 OK
+    if (conn.responseCode == 200) {
+        val inStream: InputStream = conn.inputStream
+        val reader = BufferedReader(inStream.reader())
+        reader.use { reader ->
+            val tempResponse = reader.readText()
+            simplifiedPokedexEntries = (simplifyPokedexEntries(tempResponse))
         }
-        conn.disconnect()
     }
+    conn.disconnect()
 }
 
-public fun getPokedexEntries(): ArrayList<Pokemon>{
-    // run the thread
-    getAPIFromWeb().start()
+public fun getPokedexEntries(): List<Pokemon> {
+    getAPIFromWeb()
     //do the parsing
-    val simplifiedPokeEntries = GSON.fromJson(simplifiedPokedexEntries, JsonObject::class.java)
+    val simplifiedPokeEntries = GSON.fromJson(simplifiedPokedexEntries, JsonArray::class.java)
     for (i in simplifiedPokeEntries.asJsonArray) {
         pokedexEntries.add(Pokemon(i.asJsonObject["number"].asInt, i.asJsonObject["name"].asString))
     }

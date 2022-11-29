@@ -13,7 +13,7 @@ import com.google.gson.GsonBuilder
 import dawsoncollege.android.pokedex.databinding.PokedexItemBinding
 
 // TODO : take a list of pokedex entries as parameter to [PokedexRecyclerViewAdapter]'s constructor
-class PokedexRecyclerViewAdapter :
+class PokedexRecyclerViewAdapter(private val pokemonList: List<Pokemon>) :
     RecyclerView.Adapter<PokedexRecyclerViewAdapter.PokedexViewHolder>() {
     private val LOG_TAG = "POKEDEX_ADAPTER"
     private val GSON: Gson = GsonBuilder().setPrettyPrinting().create()
@@ -29,11 +29,11 @@ class PokedexRecyclerViewAdapter :
         val binding = holder.binding
         val context = binding.root.context
         // TODO : get the pokedex entry from the list that this adapter should have
-        val pokedexEntry: Any = {}
+        val pokedexEntry = pokemonList[position]
 
         // TODO : change to show the information of the pokedex entry
-        binding.pokedexNumberTxt.text = "999"
-        binding.pokemonNameTxt.text = "pokemon name"
+        binding.pokedexNumberTxt.text = pokedexEntry.number.toString()
+        binding.pokemonNameTxt.text = pokedexEntry.name
 
         binding.infoBtn.setOnClickListener {
             val intent = Intent(context, ShowPokemonActivity::class.java).also {
@@ -47,12 +47,12 @@ class PokedexRecyclerViewAdapter :
                 Toast.makeText(
                     context,
                     // TODO : change "pokemon name" to the name of the pokemon
-                    context.getString(R.string.error_intent_show_pokemon, "pokemon name"),
+                    context.getString(R.string.error_intent_show_pokemon, pokedexEntry.name),
                     Toast.LENGTH_LONG
                 ).show()
             }
         }
     }
 
-    override fun getItemCount(): Int = 0 // TODO : change that to get the real item count
+    override fun getItemCount(): Int = pokemonList.size // TODO : change that to get the real item count
 }
