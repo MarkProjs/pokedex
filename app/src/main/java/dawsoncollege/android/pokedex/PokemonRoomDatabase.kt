@@ -8,3 +8,9 @@ import androidx.room.RoomDatabase
 abstract class PokemonRoomDatabase: RoomDatabase() {
     abstract fun pokemonDao(): PokemonDao
 }
+
+
+@Database(entities = [PokeInfo::class], version = 1)
+abstract class PokeInfoRoomDatabase: RoomDatabase() {
+    abstract fun pokeInfoDao(): PokeInfoDao
+}
