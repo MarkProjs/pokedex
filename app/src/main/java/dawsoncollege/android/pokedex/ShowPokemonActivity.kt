@@ -8,6 +8,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.room.Room
 import com.google.gson.Gson
+import com.google.gson.JsonArray
+import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import dawsoncollege.android.pokedex.ShowPokemonActivity.ShowPokemonLoadState.*
 import dawsoncollege.android.pokedex.databinding.ActivityShowPokemonBinding
@@ -163,7 +165,6 @@ class ShowPokemonActivity : AppCompatActivity() {
 
 
     private fun displayPokemon() {
-        // TODO : from the pokemon data that was loaded by [loadPokemon], display it
         binding.pokedexNumberTxt.text = pokeNameAndNumber.asJsonObject["name"].asString/* pokedex entry number e.g "#023" */
         binding.pokemonNameTxt.text =
             pokeNameAndNumber.asJsonObject["number"].asInt.toString()/* pokedex entry name e.g. "pikachu" */
@@ -171,7 +172,7 @@ class ShowPokemonActivity : AppCompatActivity() {
         binding.frontImg.setImageBitmap(frontImage)
         binding.backImg.setImageBitmap(backImage)
 //
-//        binding.pokemonTypesTxt.text = /* pokemon types e.g. "poison, grass" */
+        binding.pokemonTypesTxt.text = turnArrToString(pokeInfo.asJsonObject["types"].asJsonArray)/* pokemon types e.g. "poison, grass" */
         binding.pokemonExpTxt.text = pokeInfo.asJsonObject["base_exp_reward"].asInt.toString()
         binding.pokemonMaxhpTxt.text = pokeInfo.asJsonObject["base_maxHp"].asInt.toString()
         binding.pokemonAttTxt.text = pokeInfo.asJsonObject["base_attack"].asInt.toString()
@@ -179,5 +180,20 @@ class ShowPokemonActivity : AppCompatActivity() {
         binding.pokemonSpAttTxt.text = pokeInfo.asJsonObject["base_special-attack"].asInt.toString()
         binding.pokemonSpDefTxt.text = pokeInfo.asJsonObject["base_special-defense"].asInt.toString()
         binding.pokemonSpeedTxt.text = pokeInfo.asJsonObject["base_speed"].asInt.toString()
+    }
+
+    private fun turnArrToString(arr: JsonArray): String {
+        var types: String = arr[0].asString
+        if (arr.size() > 0) {
+            for(i in 1..arr.size()) {
+                types += if (i == arr.size() - 1) {
+                    arr[arr.size() -1].asString
+                } else {
+                    ", ${arr[i].asString}"
+                }
+            }
+        }
+
+        return types
     }
 }
