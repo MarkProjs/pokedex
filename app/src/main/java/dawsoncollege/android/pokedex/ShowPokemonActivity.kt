@@ -5,6 +5,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.Gson
+import com.google.gson.JsonObject
 import dawsoncollege.android.pokedex.ShowPokemonActivity.ShowPokemonLoadState.*
 import dawsoncollege.android.pokedex.databinding.ActivityShowPokemonBinding
 import kotlinx.coroutines.launch
@@ -18,6 +19,7 @@ class ShowPokemonActivity : AppCompatActivity() {
     }
 
     private val GSON: Gson = Gson()
+    private lateinit var pokemonInfo: JsonObject
 
     /**
      * [IN_PROGRESS] The activity is currently loading data from disk or network
@@ -69,7 +71,8 @@ class ShowPokemonActivity : AppCompatActivity() {
 
         intent.extras?.let {
             // TODO : get the result from the intent, into a variable
-            GSON.fromJson(it.getString(POKEDEX_ENTRY_KEY), Any::class.java)
+            val stringifiedPokeInfo = it.getString(POKEDEX_ENTRY_KEY)
+            pokemonInfo = getPokemonDetails(stringifiedPokeInfo)
         }
 
         loadPokemon()

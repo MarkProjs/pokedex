@@ -116,7 +116,7 @@ fun getPokemonAPI(pokemonName: String): String {
 }
 
 //turn into json object
-fun getPokemonDetails(pokeInfoStringified: String): JsonObject {
+fun getPokemonDetails(pokeInfoStringified: String?): JsonObject {
     //parse the data from the api pokemon and return it
     return GSON.fromJson(pokeInfoStringified, JsonObject::class.java)
 }
