@@ -8,6 +8,7 @@ import com.google.gson.Gson
 import com.google.gson.JsonObject
 import dawsoncollege.android.pokedex.ShowPokemonActivity.ShowPokemonLoadState.*
 import dawsoncollege.android.pokedex.databinding.ActivityShowPokemonBinding
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
@@ -19,7 +20,7 @@ class ShowPokemonActivity : AppCompatActivity() {
     }
 
     private val GSON: Gson = Gson()
-    private lateinit var pokemonInfo: JsonObject
+//    private lateinit var pokemonInfo: JsonObject
 
     /**
      * [IN_PROGRESS] The activity is currently loading data from disk or network
@@ -71,8 +72,7 @@ class ShowPokemonActivity : AppCompatActivity() {
 
         intent.extras?.let {
             // TODO : get the result from the intent, into a variable
-            val stringifiedPokeInfo = it.getString(POKEDEX_ENTRY_KEY)
-            pokemonInfo = getPokemonDetails(stringifiedPokeInfo)
+            GSON.fromJson(it.getString(POKEDEX_ENTRY_KEY), Any::class.java)
         }
 
         loadPokemon()
@@ -80,7 +80,7 @@ class ShowPokemonActivity : AppCompatActivity() {
     }
 
     // TODO : call this when data was loaded from the local cache
-    private fun showLoadFromDbToast() = runBlocking {
+    private suspend fun showLoadFromDbToast() = coroutineScope {
         launch {
             Toast.makeText(
                 applicationContext,
@@ -92,7 +92,7 @@ class ShowPokemonActivity : AppCompatActivity() {
 
 
     // TODO : call this when data had to be loaded from the network API
-    private fun showLoadFromAPIToast() = runBlocking {
+    private suspend fun showLoadFromAPIToast() = coroutineScope {
         launch {
             Toast.makeText(
                 applicationContext,
@@ -104,7 +104,7 @@ class ShowPokemonActivity : AppCompatActivity() {
 
 
     // TODO : call this when data loading from cache and network failed
-    private fun showErrorLoadToast() = runBlocking {
+    private suspend fun showErrorLoadToast() = coroutineScope {
         launch {
             Toast.makeText(
                 applicationContext,

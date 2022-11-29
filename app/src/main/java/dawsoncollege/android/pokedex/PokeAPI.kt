@@ -115,11 +115,6 @@ fun getPokemonAPI(pokemonName: String): String {
     conn.disconnect()
 }
 
-//turn into json object
-fun getPokemonDetails(pokeInfoStringified: String?): JsonObject {
-    //parse the data from the api pokemon and return it
-    return GSON.fromJson(pokeInfoStringified, JsonObject::class.java)
-}
 
 /**
  * Simplifies the API response from the pokemon endpoint.

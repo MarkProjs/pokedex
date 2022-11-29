@@ -98,7 +98,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun loadPokedexEntries() {
         setLoadState(IN_PROGRESS)
-
         lifecycleScope.launch(Dispatchers.Main) {
             pokedexEntries = fetchData()
             showPokedexEntries()
