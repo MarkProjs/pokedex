@@ -15,5 +15,8 @@ interface PokeInfoDao {
     suspend fun insertPokeInfo(pokeInfo: PokeInfo)
 
     @Query ("SELECT (SELECT COUNT(*) FROM pokemon_info_table)== 0")
-    fun isEmpty(): Boolean
+    fun isTableEmpty(): Boolean
+
+    @Query ("SELECT COUNT(*) FROM pokemon_info_table WHERE name = :name")
+    fun countPokemon(name: String): Int
 }
