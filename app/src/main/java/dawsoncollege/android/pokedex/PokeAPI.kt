@@ -18,7 +18,6 @@ const val POKEMON_BASE_URL = "$POKE_API_BASE_URL/pokemon"
 
 private val GSON: Gson = GsonBuilder().setPrettyPrinting().create()
 private var simplifiedPokedexEntries: String = ""
-private var simplifiedPokemon: String = ""
 private var pokedexEntries = arrayListOf<Pokemon>()
 
 /**
@@ -99,6 +98,7 @@ fun getPokedexEntries(): List<Pokemon> {
 fun getPokemonAPI(pokemonName: String): String {
     val url = URL("${POKEMON_BASE_URL}/${pokemonName}")
     val conn = url.openConnection() as HttpsURLConnection
+    var simplifiedPokemon = ""
     conn.requestMethod = "GET"
     //open the socket
     conn.connect()
@@ -116,9 +116,9 @@ fun getPokemonAPI(pokemonName: String): String {
 }
 
 //turn into json object
-fun getPokemonDetails(pokeInfo: String): JsonObject {
+fun getPokemonDetails(pokeInfoStringified: String): JsonObject {
     //parse the data from the api pokemon and return it
-    return GSON.fromJson(pokeInfo, JsonObject::class.java)
+    return GSON.fromJson(pokeInfoStringified, JsonObject::class.java)
 }
 
 /**
