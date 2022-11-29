@@ -96,7 +96,7 @@ fun getPokedexEntries(): List<Pokemon> {
 }
 
 //get the pokemon API
-private fun getPokemonAPI(pokemonName: String) {
+fun getPokemonAPI(pokemonName: String): String {
     val url = URL("${POKEMON_BASE_URL}/${pokemonName}")
     val conn = url.openConnection() as HttpsURLConnection
     conn.requestMethod = "GET"
@@ -111,14 +111,14 @@ private fun getPokemonAPI(pokemonName: String) {
             simplifiedPokemon = simplifyPokemon(tempResponse)
         }
     }
+    return  simplifiedPokemon
     conn.disconnect()
 }
 
 //turn into json object
-fun getPokemonDetails(pokemonName: String): JsonObject {
-    getPokemonAPI(pokemonName)
+fun getPokemonDetails(pokeInfo: String): JsonObject {
     //parse the data from the api pokemon and return it
-    return GSON.fromJson(simplifiedPokemon, JsonObject::class.java)
+    return GSON.fromJson(pokeInfo, JsonObject::class.java)
 }
 
 /**

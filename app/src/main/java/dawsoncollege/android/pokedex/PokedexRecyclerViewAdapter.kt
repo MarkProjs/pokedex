@@ -34,7 +34,7 @@ class PokedexRecyclerViewAdapter(private val pokemonList: List<Pokemon>) :
 
         binding.infoBtn.setOnClickListener {
             val intent = Intent(context, ShowPokemonActivity::class.java).also {
-                it.putExtra(ShowPokemonActivity.POKEDEX_ENTRY_KEY, GSON.toJson(pokedexEntry))
+                it.putExtra(ShowPokemonActivity.POKEDEX_ENTRY_KEY, getPokemonAPI(pokedexEntry.name))
             }
 
             try {
