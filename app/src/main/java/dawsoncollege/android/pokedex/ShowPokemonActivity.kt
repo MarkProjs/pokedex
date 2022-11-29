@@ -4,14 +4,13 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.room.Room
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import dawsoncollege.android.pokedex.ShowPokemonActivity.ShowPokemonLoadState.*
 import dawsoncollege.android.pokedex.databinding.ActivityShowPokemonBinding
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
 
 class ShowPokemonActivity : AppCompatActivity() {
     private lateinit var binding: ActivityShowPokemonBinding
@@ -22,6 +21,7 @@ class ShowPokemonActivity : AppCompatActivity() {
 
     private val GSON: Gson = Gson()
     private lateinit var pokeNameAndNumber: JsonObject
+    private lateinit var pokeInfo: JsonObject
     private lateinit var db: PokemonRoomDatabase
     private lateinit var pokeInfoDao: PokeInfoDao
 
@@ -129,16 +129,32 @@ class ShowPokemonActivity : AppCompatActivity() {
         // TODO : try to get the pokemon data (for the pokedex entry received in the intent) from the local database
 
         // TODO : if necessary get the pokemon data from the web (and cache it in the local database)
-
+        lifecycleScope.launch(Dispatchers.Main) {
+            pokeInfo = fetchPokeInfo()
+            displayPokemon()
+            setLoadState(COMPLETED)
+        }
         // TODO : if the pokemon is loaded, get the sprites from the web
 
         // TODO : display the pokemon data
     }
 
+    private suspend fun fetchPokeInfo(): JsonObject {
+        return withContext(Dispatchers.IO) {
+            var tempInfo: JsonObject = JsonObject()
+
+            tempInfo = parsePokeInfo(pokeNameAndNumber.asJsonObject["name"].asString)
+
+            return@withContext tempInfo
+        }
+    }
+
+
     private fun displayPokemon() {
         // TODO : from the pokemon data that was loaded by [loadPokemon], display it
-//        binding.pokedexNumberTxt.text = /* pokedex entry number e.g "#023" */
-//        binding.pokemonNameTxt.text = /* pokedex entry name e.g. "pikachu" */
+        binding.pokedexNumberTxt.text = pokeNameAndNumber.asJsonObject["name"].asString/* pokedex entry number e.g "#023" */
+        binding.pokemonNameTxt.text =
+            pokeNameAndNumber.asJsonObject["number"].asInt.toString()/* pokedex entry name e.g. "pikachu" */
 //
 //        binding.frontImg.setImageBitmap(/* pokemon's front sprite */)
 //        binding.backImg.setImageBitmap(/* pokemon's back sprite */)
