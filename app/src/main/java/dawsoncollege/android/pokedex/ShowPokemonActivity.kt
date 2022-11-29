@@ -20,7 +20,7 @@ class ShowPokemonActivity : AppCompatActivity() {
     }
 
     private val GSON: Gson = Gson()
-//    private lateinit var pokemonInfo: JsonObject
+    private lateinit var pokeNameAndNumber: JsonObject
 
     /**
      * [IN_PROGRESS] The activity is currently loading data from disk or network
@@ -72,7 +72,7 @@ class ShowPokemonActivity : AppCompatActivity() {
 
         intent.extras?.let {
             // TODO : get the result from the intent, into a variable
-            GSON.fromJson(it.getString(POKEDEX_ENTRY_KEY), Any::class.java)
+            pokeNameAndNumber = GSON.fromJson(it.getString(POKEDEX_ENTRY_KEY), Any::class.java) as JsonObject
         }
 
         loadPokemon()
