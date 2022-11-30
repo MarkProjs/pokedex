@@ -184,60 +184,6 @@ class ShowPokemonActivity : AppCompatActivity() {
         }
     }
 
-    private fun turnPokeInfoToJson(pokeInfo: PokeInfo): JsonObject {
-        val jsonPokeInfo = JsonObject().apply {
-            addProperty(
-                "name",
-                pokeInfo.name
-            )
-            addProperty(
-                "base_exp_reward",
-                pokeInfo.base_exp_reward
-            )
-            add(
-                "types",
-                JsonArray().apply {
-                    pokeInfo.types.split(", ").forEach {
-                        this.add(it)
-                    }
-                }
-            )
-            addProperty(
-                "base_maxHp",
-                pokeInfo.base_maxHp
-            )
-            addProperty(
-                "base_attack",
-                pokeInfo.base_attack
-            )
-            addProperty(
-                "base_defense",
-                pokeInfo.base_defense
-            )
-            addProperty(
-                "base_special-attack",
-                pokeInfo.base_special_attack
-            )
-            addProperty(
-                "base_special-defense",
-                pokeInfo.base_special_defense
-            )
-            addProperty(
-                "base_speed",
-                pokeInfo.base_speed
-            )
-            addProperty(
-                "back_sprite",
-                pokeInfo.back_sprite
-            )
-            addProperty(
-                "front_sprite",
-                pokeInfo.front_sprite
-            )
-        }
-        return jsonPokeInfo
-    }
-
     private fun displayPokemon() {
         binding.pokedexNumberTxt.text = pokeNameAndNumber.asJsonObject["name"].asString/* pokedex entry number e.g "#023" */
         binding.pokemonNameTxt.text =
