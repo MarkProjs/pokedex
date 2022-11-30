@@ -250,12 +250,13 @@ fun turnPokeInfoToJson(pokeInfo: PokeInfo): JsonObject {
             pokeInfo.base_speed
         )
         addProperty(
-            "back_sprite",
-            pokeInfo.back_sprite
-        )
-        addProperty(
             "front_sprite",
             pokeInfo.front_sprite
+
+        )
+        addProperty(
+            "back_sprite",
+            pokeInfo.back_sprite
         )
     }
     return jsonPokeInfo
