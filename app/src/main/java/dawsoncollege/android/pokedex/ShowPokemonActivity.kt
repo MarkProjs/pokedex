@@ -160,8 +160,8 @@ class ShowPokemonActivity : AppCompatActivity() {
                         tempInfo.asJsonObject["base_special-attack"].asInt,
                         tempInfo.asJsonObject["base_special-defense"].asInt,
                         tempInfo.asJsonObject["base_speed"].asInt,
-                        tempInfo.asJsonObject["front_sprite"].asString,
-                        tempInfo.asJsonObject["back_sprite"].asString
+                        tempInfo.asJsonObject["back_sprite"].asString,
+                        tempInfo.asJsonObject["front_sprite"].asString
                     )
                 )
                 withContext(Dispatchers.Main) {
