@@ -81,6 +81,7 @@ class ShowPokemonActivity : AppCompatActivity() {
         db = Room.databaseBuilder(
             this@ShowPokemonActivity,
             PokemonRoomDatabase::class.java, "pokemon_db").build()
+
         pokeInfoDao = db.pokeInfoDao()
 
         intent.extras?.let {
@@ -129,10 +130,6 @@ class ShowPokemonActivity : AppCompatActivity() {
 
     private fun loadPokemon() {
         setLoadState(IN_PROGRESS)
-
-        // TODO : try to get the pokemon data (for the pokedex entry received in the intent) from the local database
-
-        // TODO : if necessary get the pokemon data from the web (and cache it in the local database)
         lifecycleScope.launch(Dispatchers.IO) {
             pokeInfo = fetchPokeInfo()
             frontImage = getImageSprite(pokeInfo.asJsonObject["front_sprite"].asString)
@@ -150,11 +147,95 @@ class ShowPokemonActivity : AppCompatActivity() {
     private suspend fun fetchPokeInfo(): JsonObject {
         return withContext(Dispatchers.IO) {
             var tempInfo: JsonObject = JsonObject()
+            if(pokeInfoDao.noPokeInfo(pokeNameAndNumber.asJsonObject["name"].asString)){
+                tempInfo = parsePokeInfo(pokeNameAndNumber.asJsonObject["name"].asString)
+                pokeInfoDao.insertPokeInfo(
+                    PokeInfo(
+                        pokeNameAndNumber.asJsonObject["name"].asString,
+                        tempInfo.asJsonObject["base_exp_reward"].asInt,
+                        turnArrToString(tempInfo.asJsonObject["types"].asJsonArray),
+                        tempInfo.asJsonObject["base_maxHp"].asInt,
+                        tempInfo.asJsonObject["base_attack"].asInt,
+                        tempInfo.asJsonObject["base_defense"].asInt,
+                        tempInfo.asJsonObject["base_special-attack"].asInt,
+                        tempInfo.asJsonObject["base_special-defense"].asInt,
+                        tempInfo.asJsonObject["base_speed"].asInt,
+                        tempInfo.asJsonObject["front_sprite"].asString,
+                        tempInfo.asJsonObject["back_sprite"].asString
+                    )
+                )
+                withContext(Dispatchers.Main) {
+                    showLoadFromAPIToast()
+                }
+            }
+            else if(!pokeInfoDao.noPokeInfo(pokeNameAndNumber.asJsonObject["name"].asString)) {
+                tempInfo = turnPokeInfoToJson(pokeInfoDao.getPokeInfo(pokeNameAndNumber.asJsonObject["name"].asString))
+                withContext(Dispatchers.Main) {
+                    showLoadFromDbToast()
+                }
+            }
+            else {
+                withContext(Dispatchers.Main) {
+                    showErrorLoadToast()
+                }
 
-            tempInfo = parsePokeInfo(pokeNameAndNumber.asJsonObject["name"].asString)
-
+            }
             return@withContext tempInfo
         }
+    }
+
+    private fun turnPokeInfoToJson(pokeInfo: PokeInfo): JsonObject {
+        val jsonPokeInfo = JsonObject().apply {
+            addProperty(
+                "name",
+                pokeInfo.name
+            )
+            addProperty(
+                "base_exp_reward",
+                pokeInfo.base_exp_reward
+            )
+            add(
+                "types",
+                JsonArray().apply {
+                    pokeInfo.types.split(", ").forEach {
+                        this.add(it)
+                    }
+                }
+            )
+            addProperty(
+                "base_maxHp",
+                pokeInfo.base_maxHp
+            )
+            addProperty(
+                "base_attack",
+                pokeInfo.base_attack
+            )
+            addProperty(
+                "base_defense",
+                pokeInfo.base_defense
+            )
+            addProperty(
+                "base_special-attack",
+                pokeInfo.base_special_attack
+            )
+            addProperty(
+                "base_special-defense",
+                pokeInfo.base_special_defense
+            )
+            addProperty(
+                "base_speed",
+                pokeInfo.base_speed
+            )
+            addProperty(
+                "back_sprite",
+                pokeInfo.back_sprite
+            )
+            addProperty(
+                "front_sprite",
+                pokeInfo.front_sprite
+            )
+        }
+        return jsonPokeInfo
     }
 
     private fun displayPokemon() {
