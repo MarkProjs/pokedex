@@ -103,8 +103,6 @@ class MainActivity : AppCompatActivity() {
             showPokedexEntries()
             setLoadState(COMPLETED)
         }
-        
-
     }
 
 
